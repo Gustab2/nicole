@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleaños, Nicole</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+<style>
+  :root{
+    --bg-1:#0c1a12;
+    --bg-2:#13291c;
+    --bg-3:#1b3a28;
+    --cream:#eef4ec;
+    --cream-soft:#cfe2cf;
+    --gold:#5cae7a;
+    --gold-bright:#7fcf9b;
+    --blush:#a7dcb8;
+    --rose:#5cae7a;
+    --line:rgba(124,200,150,.22);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html,body{height:100%;}
+
+  body{
+    font-family:'Spectral',serif;
+    color:var(--cream);
+    background:
+      radial-gradient(120% 90% at 20% 0%, rgba(124,200,150,.16), transparent 55%),
+      radial-gradient(100% 80% at 90% 100%, rgba(90,174,122,.14), transparent 50%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 1.5rem;
+  }
+
+  /* grain overlay */
+  body::after{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* floating petals */
+  .petals{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+  .petal{
+    position:absolute;top:-8vh;
+    width:14px;height:14px;
+    background:radial-gradient(circle at 35% 30%, var(--blush), var(--rose));
+    border-radius:80% 0 80% 0;
+    opacity:.55;
+    animation:fall linear infinite;
+    filter:blur(.3px);
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);opacity:0;}
+    10%{opacity:.55;}
+    90%{opacity:.5;}
+    100%{transform:translateY(110vh) translateX(40px) rotate(540deg);opacity:0;}
+  }
+
+  .card{
+    position:relative;z-index:5;
+    max-width:680px;width:100%;
+    text-align:center;
+    padding:clamp(2rem,6vw,4rem);
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:linear-gradient(180deg, rgba(246,234,217,.045), rgba(246,234,217,.015));
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7), inset 0 1px 0 rgba(246,234,217,.06);
+    backdrop-filter:blur(2px);
+  }
+
+  .eyebrow{
+    font-family:'Spectral',serif;
+    font-style:italic;
+    font-size:clamp(.95rem,2.4vw,1.15rem);
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    opacity:0;
+    animation:rise 1s ease .2s forwards;
+  }
+  .eyebrow span{letter-spacing:.05em;text-transform:none;font-style:normal;}
+
+  .name{
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-size:clamp(3.4rem,15vw,7rem);
+    line-height:.95;
+    margin:.4rem 0 .2rem;
+    letter-spacing:-.01em;
+    background:linear-gradient(180deg, var(--cream) 0%, var(--gold-bright) 90%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    opacity:0;
+    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) .45s forwards;
+  }
+
+  .hero-name{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.6rem,6vw,2.6rem);
+    letter-spacing:.02em;
+    color:var(--blush);
+    margin-top:.3rem;
+    opacity:0;
+    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) .75s forwards;
+  }
+
+  .rule{
+    width:0;height:1px;margin:1.4rem auto;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    animation:grow 1.4s ease .9s forwards;
+  }
+  @keyframes grow{to{width:60%;}}
+
+  .message{
+    font-size:clamp(1.05rem,2.7vw,1.3rem);
+    font-weight:300;
+    line-height:1.85;
+    color:var(--cream-soft);
+    max-width:46ch;margin:0 auto;
+    opacity:0;
+    animation:rise 1.1s ease 1.1s forwards;
+  }
+  .message em{color:var(--blush);font-style:italic;}
+
+  .emoji-row{
+    font-size:clamp(1.6rem,5vw,2.2rem);
+    letter-spacing:.25em;
+    margin-top:1.4rem;
+    opacity:0;
+    animation:rise 1.1s ease 1.3s forwards;
+  }
+
+  .btn{
+    margin-top:2.4rem;
+    font-family:'Spectral',serif;
+    font-size:1.05rem;letter-spacing:.04em;
+    color:var(--bg-1);
+    background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+    border:none;border-radius:50px;
+    padding:.95rem 2.4rem;
+    cursor:pointer;
+    box-shadow:0 14px 30px -12px rgba(90,174,122,.55);
+    transition:transform .25s ease, box-shadow .25s ease;
+    opacity:0;
+    animation:rise 1s ease 1.5s forwards;
+  }
+  .btn:hover{transform:translateY(-3px);box-shadow:0 20px 40px -12px rgba(90,174,122,.7);}
+  .btn:active{transform:translateY(0);}
+
+  /* hidden secret note */
+  .secret{
+    max-height:0;overflow:hidden;
+    opacity:0;
+    transition:max-height .9s ease, opacity .9s ease, margin .9s ease;
+    margin-top:0;
+  }
+  .secret.open{max-height:560px;opacity:1;margin-top:2.2rem;}
+  .bouquet{
+    font-size:clamp(4rem,16vw,6.5rem);
+    line-height:1;
+    display:inline-block;
+    margin-bottom:.6rem;
+    transform:scale(0) rotate(-25deg);
+    filter:drop-shadow(0 12px 24px rgba(90,174,122,.45));
+  }
+  .gift-art{
+    width:clamp(160px,46vw,210px);
+    height:auto;display:block;
+  }
+  .secret.open .bouquet{
+    animation:bloom 1s cubic-bezier(.34,1.56,.64,1) .15s forwards, sway 4s ease-in-out 1.2s infinite;
+  }
+  @keyframes bloom{
+    0%{transform:scale(0) rotate(-25deg);}
+    60%{transform:scale(1.25) rotate(8deg);}
+    100%{transform:scale(1) rotate(0deg);}
+  }
+  @keyframes sway{
+    0%,100%{transform:rotate(-4deg);}
+    50%{transform:rotate(4deg);}
+  }
+  .secret p{
+    font-size:clamp(1.05rem,2.7vw,1.25rem);
+    font-weight:300;line-height:1.9;
+    color:var(--cream-soft);
+    max-width:46ch;margin:0 auto;
+  }
+  .secret .heart{color:var(--rose);}
+
+  .signature{
+    margin-top:2.6rem;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:.95rem;
+    letter-spacing:.06em;
+    color:var(--gold);
+    opacity:0;
+    animation:rise 1s ease 1.9s forwards;
+  }
+  .signature small{
+    display:block;
+    font-family:'Spectral',serif;
+    font-style:normal;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:.68rem;
+    color:var(--cream-soft);
+    opacity:.55;
+    margin-top:.5rem;
+  }
+
+  @keyframes rise{
+    from{opacity:0;transform:translateY(22px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+</style>
+</head>
+<body>
+
+  <div class="petals" id="petals"></div>
+
+  <main class="card">
+    <h1 class="name">Feliz<br>Cumpleaños</h1>
+    <p class="hero-name">Nicole</p>
+    <div class="rule"></div>
+    <p class="message">
+      Que esta vuelta al sol te traiga todo lo que mereces:
+      risas largas, planes que se cumplen y noches de esas que
+      no quieres que terminen.
+    </p>
+    <p class="emoji-row">🌸 🎂 🌷 🍰 🌺</p>
+
+    <button class="btn" id="giftBtn">Abrir tu regalo&nbsp;&nbsp;✦</button>
+
+    <div class="secret" id="secret">
+      <div class="bouquet">
+        <svg class="gift-art" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Una persona entregándole flores a otra">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="48%" r="55%">
+              <stop offset="0%" stop-color="rgba(124,200,150,.40)"/>
+              <stop offset="100%" stop-color="rgba(124,200,150,0)"/>
+            </radialGradient>
+            <linearGradient id="wrap" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f6ead9"/>
+              <stop offset="100%" stop-color="#d9b98a"/>
+            </linearGradient>
+            <g id="flower">
+              <circle cx="0" cy="-8" r="6" fill="currentColor"/>
+              <circle cx="7.6" cy="-2.5" r="6" fill="currentColor"/>
+              <circle cx="4.7" cy="6.5" r="6" fill="currentColor"/>
+              <circle cx="-4.7" cy="6.5" r="6" fill="currentColor"/>
+              <circle cx="-7.6" cy="-2.5" r="6" fill="currentColor"/>
+              <circle cx="0" cy="0" r="4" fill="#3d1d2c"/>
+            </g>
+          </defs>
+
+          <circle cx="150" cy="155" r="130" fill="url(#glow)"/>
+
+          <!-- corazones -->
+          <path d="M150,58 C146,50 134,50 134,60 C134,70 150,80 150,80 C150,80 166,70 166,60 C166,50 154,50 150,58 Z" fill="#f0a8ba" opacity=".95"/>
+          <path d="M112,80 C110,76 104,76 104,81 C104,86 112,91 112,91 C112,91 120,86 120,81 C120,76 114,76 112,80 Z" fill="#d98199" opacity=".7"/>
+          <path d="M190,86 C188,82 182,82 182,87 C182,92 190,97 190,97 C190,97 198,92 198,87 C198,82 192,82 190,86 Z" fill="#d98199" opacity=".7"/>
+
+          <!-- ============ DADOR (izquierda) ============ -->
+          <path d="M62,232 C56,176 64,132 80,132 C96,132 104,176 98,232 Z" fill="#15301f"/>
+          <path d="M80,136 L74,154 L80,150 L86,154 Z" fill="#e8b878"/>
+          <circle cx="80" cy="100" r="19" fill="#e9d6c4"/>
+          <path d="M62,98 C62,76 98,76 98,98 C98,86 89,80 80,80 C71,80 62,86 62,98 Z" fill="#2a1a20"/>
+          <!-- brazo que ofrece -->
+          <path d="M93,148 C112,150 126,154 137,162" fill="none" stroke="#15301f" stroke-width="13" stroke-linecap="round"/>
+
+          <!-- ============ RECEPTORA (derecha) ============ -->
+          <path d="M198,232 C202,168 208,134 222,134 C236,134 242,168 246,232 Z" fill="#2f8f5e"/>
+          <circle cx="222" cy="100" r="19" fill="#e9d6c4"/>
+          <path d="M201,100 C199,72 245,72 243,100 C247,116 242,138 238,146 L235,120 C237,98 232,80 222,80 C212,80 207,98 209,120 L206,146 C202,138 197,116 201,100 Z" fill="#3a2230"/>
+          <!-- brazo que recibe -->
+          <path d="M210,150 C192,152 180,154 169,156" fill="none" stroke="#2f8f5e" stroke-width="12" stroke-linecap="round"/>
+
+          <!-- ============ RAMO (al centro) ============ -->
+          <!-- envoltura -->
+          <path d="M126,162 L150,160 L142,182 Z" fill="url(#wrap)"/>
+          <!-- tallos -->
+          <g stroke="#5f7d57" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <path d="M134,168 C144,158 150,146 153,132"/>
+            <path d="M134,168 C146,160 158,154 166,146"/>
+            <path d="M134,168 C145,162 152,158 158,150"/>
+          </g>
+          <!-- hojas -->
+          <g fill="#6f9166">
+            <ellipse cx="172" cy="152" rx="10" ry="4.5" transform="rotate(28 172 152)"/>
+            <ellipse cx="148" cy="126" rx="8" ry="4" transform="rotate(-12 148 126)"/>
+          </g>
+          <!-- flores -->
+          <use href="#flower" transform="translate(154,128) scale(1.05)" style="color:#d98199"/>
+          <use href="#flower" transform="translate(140,140) scale(0.85)" style="color:#f0a8ba"/>
+          <use href="#flower" transform="translate(169,138) scale(0.9)" style="color:#f3cd92"/>
+          <use href="#flower" transform="translate(156,146) scale(0.85)" style="color:#f0a8ba"/>
+          <!-- lazo -->
+          <path d="M134,168 l-9,-4 0,8 z" fill="#d98199"/>
+          <circle cx="134" cy="168" r="2.6" fill="#c56f88"/>
+
+          <!-- manos (encima del ramo) -->
+          <circle cx="137" cy="162" r="6" fill="#e9d6c4"/>
+          <circle cx="167" cy="156" r="6" fill="#e9d6c4"/>
+        </svg>
+      </div>
+      <p>
+        Que tengas un hermoso día, Nicole.
+        <span class="heart">&hearts;</span><br>
+        Muchos besos y abrazos.
+      </p>
+    </div>
+
+    <p class="signature">
+      Con cariño<br>
+      <small>Aldo Paolo</small>
+    </p>
+  </main>
+
+<script>
+  // ---- floating petals ----
+  const petalLayer = document.getElementById('petals');
+  const N = 22;
+  for(let i=0;i<N;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const size = 8 + Math.random()*14;
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.animationDuration = (9 + Math.random()*11) + 's';
+    p.style.animationDelay = (-Math.random()*15) + 's';
+    p.style.opacity = (0.3 + Math.random()*0.4).toFixed(2);
+    petalLayer.appendChild(p);
+  }
+
+  // ---- gift reveal + confetti ----
+  const btn = document.getElementById('giftBtn');
+  const secret = document.getElementById('secret');
+  let opened = false;
+
+  function burst(){
+    if(typeof confetti !== 'function') return;
+    const colors = ['#7fcf9b','#5cae7a','#a7dcb8','#eef4ec','#2f8f5e'];
+    confetti({particleCount:90, spread:70, origin:{y:0.6}, colors});
+    setTimeout(()=>confetti({particleCount:60, angle:60, spread:55, origin:{x:0}, colors}),150);
+    setTimeout(()=>confetti({particleCount:60, angle:120, spread:55, origin:{x:1}, colors}),300);
+  }
+
+  btn.addEventListener('click', ()=>{
+    if(!opened){
+      secret.classList.add('open');
+      btn.textContent = 'Con todo mi cariño ✦';
+      opened = true;
+    }
+    burst();
+  });
+</script>
+</body>
+</html>
